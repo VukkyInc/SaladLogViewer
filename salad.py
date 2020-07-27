@@ -4,13 +4,13 @@
 import os
 import time
 import traceback
-try:
-	from win32gui import GetWindowText, GetForegroundWindow
-	if GetWindowText(GetForegroundWindow()) == '': # force cmd.exe usage
-		os.system('start py salad.py')
-		exit()
-except ModuleNotFoundError:
-	pass
+#try:
+#	from win32gui import GetWindowText, GetForegroundWindow
+#	if GetWindowText(GetForegroundWindow()) == '': # force cmd.exe usage
+#		os.system('start py salad.py')
+#		exit()
+#except ModuleNotFoundError:
+#	pass
 os.system('title fancy salad miner logs')
 limit = 10
 path = os.getenv('APPDATA')
