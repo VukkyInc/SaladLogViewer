@@ -1,2 +1,2 @@
-# SaladLogViewer
-Salad Log Viewer (originally by SharkOfGod)
+# Salad Log Viewer
+*The best tool for viewing your Salad logs*
