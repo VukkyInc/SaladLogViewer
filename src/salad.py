@@ -81,7 +81,7 @@ while True:
 				}
 				r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
 				if r.status_code != 200:
-					print(f'{bcolors.WARNING}{bcolors.BOLD}not a miner error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{bcolors.ENDC}')
+					fancytype(f'{bcolors.WARNING}{bcolors.BOLD}not a miner error! something went wrong with the salad api. make sure your tokens are correct.{bcolors.ENDC}')
 					continue
 				jason = r.json()
 				if jason['currentBalance'] > oldbalance:
