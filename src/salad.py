@@ -47,7 +47,7 @@ except Exception as e:
 	title = 'fancy salad miner logs'
 	notifthreshold = 1 # ping when balance changes by this
 
-# settings end (shark make this in a json file idiot)
+# settings end (shark made settings in a json file therefore he is no longer an idiot)
 
 # try:
 # 	from win32gui import GetWindowText, GetForegroundWindow
@@ -62,21 +62,6 @@ limit = 10
 path = os.getenv('APPDATA')
 path = path + '/salad/logs/main.log'
 
-def fancytype(words, notime=False, colors=[]):
-	words = ' ' + words
-
-	for color in colors:
-		words = eval(color) + words
-	
-	if not notime:
-		words = timenow() + ' ' + words
-	strin = ''
-	for let in words:
-		strin = strin + let
-		print(strin, end='\r')
-		time.sleep(0.0078125)
-	print(words + default_colors.ENDC + default_colors.DEFAULT)
-
 class default_colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -87,6 +72,21 @@ class default_colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     DEFAULT = '\033[37;1m'
+
+def fancytype(words, notime=False, colors=[]):
+	colorwords = ''
+	for color in colors:
+		colorwords = eval(color) + colorwords
+	if not notime:
+		words = ' ' + colorwords + timenow() + ' ' + words
+	else:
+		words = ' ' + colorwords + words
+	strin = ''
+	for let in words:
+		strin = strin + let
+		print(strin, end='\r')
+		time.sleep(0.0078125)
+	print(words + default_colors.ENDC + default_colors.DEFAULT)
 
 with open(path) as f:
 	oldest = f.readlines()[-1]
@@ -203,11 +203,11 @@ while True:
 				lien = line[-i].replace('\n', '')
 				if not coloorswork:
 					if 'ETH share found!' in lien:
-						fancytype(f'{lien}', notime=True, colors=[default_colors.OKGREEN, default_colors.BOLD])
+						fancytype(f'{lien}', notime=True, colors=['default_colors.OKGREEN', 'default_colors.BOLD'])
 					elif 'GPU' in lien:
-						fancytype(f'{lien}', notime=True, colors=[default_colors.OKBLUE, default_colors.BOLD])
+						fancytype(f'{lien}', notime=True, colors=['default_colors.OKBLUE', 'default_colors.BOLD'])
 					elif 'Eth: Average speed' in lien:
-						fancytype(f'{lien}', notime=True, colors=[default_colors.FAIL, default_colors.BOLD])
+						fancytype(f'{lien}', notime=True, colors=['default_colors.FAIL', 'default_colors.BOLD'])
 					else:
 						fancytype(lien, notime=True)
 				else:
@@ -235,10 +235,10 @@ while True:
 				if jason['currentBalance'] > oldbalance:
 					diff = jason['currentBalance'] - oldbalance
 					oldbalance = jason['currentBalance']
-					fancytype('[salad] balance increased by $' + str(diff), colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
-					fancytype('[salad] new salad balance: $' + str(jason['currentBalance']), colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
+					fancytype('[salad] balance increased by $' + str(diff), colors=['default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
+					fancytype('[salad] new salad balance: $' + str(jason['currentBalance']), colors=['default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
 					if jason['currentBalance'] - pongbal > notifthreshold:
-						fancytype('[salad] sending a notification', colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
+						fancytype('[salad] sending a notification', colors=['default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
 						toaster.show_toast("salad log thing", "balance increased by " + str(jason['currentBalance'] - pongbal) + ' since last notification!', threaded=True, icon_path=None, duration=3)
 						pongbal = jason['currentBalance']
 				else:
