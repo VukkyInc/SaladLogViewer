@@ -1,7 +1,4 @@
 
-
-# made this to track my salad mining hashrate in real time!
-
 # readme starts
 
 # shitty code i know
@@ -20,9 +17,7 @@
 # if it works: yay!
 # if it doesnt: fuck! dm SharkOfGod#8424
 
-# salad meanies we cant use api >:C
 # public salad api when https://discordapp.com/channels/509419745834041355/573570381584269312/737716498507890830
-# u can still turn this on at ur own risk ¯\_(ツ)_/¯
 
 # readme ends
 
@@ -60,6 +55,7 @@ except Exception as e:
 	enablesalad = False # balance updates in logs
 	title = 'fancy salad miner logs'
 	notifthreshold = 1 # ping when balance changes by this
+	enablekey = False
 
 # settings end (shark made settings in a json file therefore he is no longer an idiot)
 
@@ -120,23 +116,28 @@ from datetime import datetime
 def timenow():
 	return '[' + str(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]) + ']'
 
+# prevent enablesalad from working
+
 if enablesalad:
+ 	enablesalad = False
+ 	fancytype('[salad] enablesalad has been disabled | see readme in code for more info', colors=['default_colors.FAIL'], speed=0.03125)
+ 	time.sleep(3)
+ 	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'], speed=0.015625)
+ 	fancytype('[salad] or remove this part of code to use balance tracker anyway', colors=['default_colors.FAIL'], speed=0.015625)
 
-	enablesalad = False
-
-	fancytype('[salad] enablesalad has been disabled | see code comments for more info', colors=['default_colors.FAIL'], speed=0.03125)
-
-	time.sleep(3)
-
-	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'], speed=0.015625)
-
-# turn off enablesalad
+# u can delete this part to allow it
+# however saladlogreader dev team does not care what happens to ur account if u do
+# good luck :D
 
 
 with open(path) as f:
 	oldest = f.readlines()[-1]
 
 if enablesalad:
+	fancytype('[salad] enabled!', colors=['default_colors.OKGREEN'])
+	headers = {
+		"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Salad/0.4.0 Chrome/78.0.3904.130 Electron/7.1.9 Safari/537.36'
+	}
 	try:
 		import requests
 		from dotenv import load_dotenv
@@ -170,7 +171,7 @@ if enablesalad:
 		"Salad.Authentication": salad_authentication
 	}
 	try:
-		r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
+		r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
 		if r.status_code != 200:
 			print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 			os.system('pause')
@@ -195,13 +196,10 @@ if enablekey:
 		from win32gui import GetWindowText, GetForegroundWindow
 
 def updatever(): # absolutely not copy pasted from my bots code
-	if os.path.isfile('noupdate.txt'):
-		fancytype('[update] noupdate')
-		return
 	try:
 		import requests
 	except ModuleNotFoundError:
-		fancytype('[update] requests is required to update!')
+		fancytype('[update] requests is required to check for updates!')
 		return
 	try:
 		with open('version.txt') as f:
@@ -210,18 +208,10 @@ def updatever(): # absolutely not copy pasted from my bots code
 		chver = chver.text.replace('\n', '')
 		chver = chver.replace('"', '')
 		if int(chver) > ver:
-			fancytype('[update] update available! press any key or create a noupdate.txt file and restart')
+			fancytype('[update] update available! pls download new version from github.com/VukkyInc/SaladLogViewer')
 			os.system('pause')
-			time.sleep(1)
-			with open('temp.py', 'w+') as f:
-				file = __file__.replace('\\', '/')
-				print(file)
-				comd = 'print("hold on im updating myself lmao")\nimport time\nimport requests\nr = requests.get(url = "http://api.shruc.ml/saladlog/download", params = {})\nwith open("' + file + '", "w+", encoding="utf-8") as f:\n\tf.write(str(r.text))\nr = requests.get(url = "http://api.shruc.ml/saladlog/version", params = {})\nwith open("version.txt", "w+") as f:\n\tf.write("'+ chver +'")\ntime.sleep(1)\nimport os\nos.system(\'start cmd /c "del temp.py & start py ' + file + '\')'
-				f.write(comd)
-			print('u can close this window')
-			os.system('start cmd /c py temp.py')
-			os.system('exit')
-			exit()
+			with open('version.txt', 'w+') as f:
+				f.write(chver)
 		else:
 			fancytype('[update] up to date!')
 	except requests.ConnectionError as e:
@@ -280,7 +270,7 @@ while True:
 					"Salad.Antiforgery": salad_antiforgery,
 					"Salad.Authentication": salad_authentication
 				}
-				r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
+				r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
 				if r.status_code != 200:
 					print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 					continue
@@ -310,7 +300,7 @@ while True:
 						print(' here is h e l p:\n help - show this\n balance - show balance\n rainbow - toggle SHINY\n exit - resume log river')
 					elif inp == 'balance':
 						if enablesalad:
-							r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
+							r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
 							if r.status_code != 200:
 								print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 								continue
