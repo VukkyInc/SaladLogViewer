@@ -24,17 +24,30 @@
 
 # settings begin
 
-enablesalad = True # set to true if u wanna see balance updates in logs
-
-title = 'fancy salad miner logs'
-
-notifthreshold = 0.0001 # ping when balance changes by this
-
-# settings end (shark make this in a json file idiot)
-
+import json
 import os
 import time
 import traceback
+try:
+	with open('colors.json') as f:
+		coloors = json.load(f)
+	coloorswork = True
+	enablesalad = coloors['settings']['enable_salad_balance_tracker']
+	title = coloors['settings']['window_title']
+	notifthreshold = coloors['settings']['balance_notification_every']
+	class custom_colors:
+		pass
+	for color in coloors['custom_colors'].keys():
+		setattr(custom_colors, color, coloors['custom_colors'][color])
+except Exception as e:
+	print(traceback.format_exc())
+	print('colors.json error using defaults')
+	coloorswork = False
+	enablesalad = False # balance updates in logs
+	title = 'fancy salad miner logs'
+	notifthreshold = 1 # ping when balance changes by this
+
+# settings end (shark make this in a json file idiot)
 
 # try:
 # 	from win32gui import GetWindowText, GetForegroundWindow
@@ -49,15 +62,42 @@ limit = 10
 path = os.getenv('APPDATA')
 path = path + '/salad/logs/main.log'
 
+def fancytype(words, notime=False, colors=[]):
+	words = ' ' + words
+
+	for color in colors:
+		words = eval(color) + words
+	
+	if not notime:
+		words = timenow() + ' ' + words
+	strin = ''
+	for let in words:
+		strin = strin + let
+		print(strin, end='\r')
+		time.sleep(0.0078125)
+	print(words + default_colors.ENDC + default_colors.DEFAULT)
+
+class default_colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    DEFAULT = '\033[37;1m'
+
 with open(path) as f:
 	oldest = f.readlines()[-1]
+
+from datetime import datetime
 
 if enablesalad:
 	try:
 		import requests
 		from dotenv import load_dotenv
 		load_dotenv()
-		from datetime import datetime
 		from win10toast import ToastNotifier
 		toaster = ToastNotifier()
 		salad_antiforgery = os.getenv('SALAD_ANTIFORGERY')
@@ -70,14 +110,13 @@ if enablesalad:
 			exit()
 
 	except ModuleNotFoundError:
-		print('not found a few modules pls approve admin prompt to install')
+		print('not found a few modules press any key to install')
 		os.system('pause')
-		os.system(""" powershell "start cmd -Verb runAs -Argumentlist '/c', 'cd', '""" + os.path.abspath(os.getcwd()) +"""', '&', 'pip', 'install', '-r', 'requirements.txt'" """)
+		os.system('pip install -r requirements.txt --user')
 		time.sleep(5)
 		import requests
 		from dotenv import load_dotenv
 		load_dotenv()
-		from datetime import datetime
 		from win10toast import ToastNotifier
 		toaster = ToastNotifier()
 		salad_antiforgery = os.getenv('SALAD_ANTIFORGERY')
@@ -87,41 +126,21 @@ if enablesalad:
 		"Salad.Antiforgery": salad_antiforgery,
 		"Salad.Authentication": salad_authentication
 	}
-	r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
-	if r.status_code != 200:
-		print(f'{bcolors.WARNING}{bcolors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{bcolors.ENDC}')
-		os.system('pause')
-	jason = r.json()
-	oldbalance = jason['currentBalance']
-	pongbal = oldbalance
-	e = 0
-
-def fancytype(words, notime=False, colors=[]):
-	words = ' ' + words
-	for color in colors:
-		words = color + words
-	if not notime:
-		words = timenow() + ' ' + words
-	strin = ''
-	for let in words:
-		strin = strin + let
-		print(strin, end='\r')
-		time.sleep(0.0078125)
-	print(words + bcolors.ENDC + bcolors.DEFAULT)
+	try:
+		r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
+		if r.status_code != 200:
+			print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
+			os.system('pause')
+		jason = r.json()
+		oldbalance = jason['currentBalance']
+		pongbal = oldbalance
+		e = 0
+	except requests.ConnectionError:
+		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error! either salad is down or the caveman running this doesnt have internet{default_colors.ENDC}')
+		enablesalad = False
 
 def timenow():
 	return '[' + str(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]) + ']'
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    DEFAULT = '\033[37;1m'
 
 def updatever(): # absolutely not copy pasted from my bots code
 	if os.path.isfile('noupdate.txt'):
@@ -182,14 +201,25 @@ while True:
 				num = limit+1
 			for i in reversed(range(1, num)):
 				lien = line[-i].replace('\n', '')
-				if 'ETH share found!' in lien:
-					fancytype(f'{lien}', notime=True, colors=[bcolors.OKGREEN, bcolors.BOLD])
-				elif 'GPU1:' in lien:
-					fancytype(f'{lien}', notime=True, colors=[bcolors.OKBLUE, bcolors.BOLD])
-				elif 'Eth: Average speed' in lien:
-					fancytype(f'{lien}', notime=True, colors=[bcolors.FAIL, bcolors.BOLD])
+				if not coloorswork:
+					if 'ETH share found!' in lien:
+						fancytype(f'{lien}', notime=True, colors=[default_colors.OKGREEN, default_colors.BOLD])
+					elif 'GPU' in lien:
+						fancytype(f'{lien}', notime=True, colors=[default_colors.OKBLUE, default_colors.BOLD])
+					elif 'Eth: Average speed' in lien:
+						fancytype(f'{lien}', notime=True, colors=[default_colors.FAIL, default_colors.BOLD])
+					else:
+						fancytype(lien, notime=True)
 				else:
-					fancytype(lien, notime=True)
+					found = False
+					for blah in coloors['custom_text'].keys():
+						if blah in lien:
+							fancytype(f'{lien}', notime=True, colors=coloors['custom_text'][blah])
+							found = True
+							break
+					if not found:
+						fancytype(lien, notime=True)
+
 		if enablesalad:
 			if e >= 10:
 				fancytype('[salad] checking balance')
@@ -199,16 +229,16 @@ while True:
 				}
 				r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
 				if r.status_code != 200:
-					print(f'{bcolors.WARNING}{bcolors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{bcolors.ENDC}')
+					print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 					continue
 				jason = r.json()
 				if jason['currentBalance'] > oldbalance:
 					diff = jason['currentBalance'] - oldbalance
 					oldbalance = jason['currentBalance']
-					fancytype('[salad] balance increased by $' + str(diff), colors=[bcolors.OKGREEN, bcolors.BOLD, bcolors.UNDERLINE])
-					fancytype('[salad] new salad balance: $' + str(jason['currentBalance']), colors=[bcolors.OKGREEN, bcolors.BOLD, bcolors.UNDERLINE])
+					fancytype('[salad] balance increased by $' + str(diff), colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
+					fancytype('[salad] new salad balance: $' + str(jason['currentBalance']), colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
 					if jason['currentBalance'] - pongbal > notifthreshold:
-						fancytype('[salad] sending a notification', colors=[bcolors.OKGREEN, bcolors.BOLD, bcolors.UNDERLINE])
+						fancytype('[salad] sending a notification', colors=[default_colors.OKGREEN, default_colors.BOLD, default_colors.UNDERLINE])
 						toaster.show_toast("salad log thing", "balance increased by " + str(jason['currentBalance'] - pongbal) + ' since last notification!', threaded=True, icon_path=None, duration=3)
 						pongbal = jason['currentBalance']
 				else:
@@ -218,4 +248,4 @@ while True:
 				e += 1
 	except Exception as o:
 		print(traceback.format_exc())
-		print(f'{bcolors.WARNING}{bcolors.BOLD}bad bad error!{bcolors.ENDC}{bcolors.DEFAULT}', str(o))
+		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error!{default_colors.ENDC}{default_colors.DEFAULT}', str(o))
