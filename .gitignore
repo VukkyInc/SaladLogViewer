@@ -131,3 +131,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 src/version.txt
+src/noupdate.txt
