@@ -28,6 +28,7 @@ import json
 import os
 import time
 import traceback
+rainbow = False
 try:
 	with open('colors.json') as f:
 		coloors = json.load(f)
@@ -35,6 +36,15 @@ try:
 	enablesalad = coloors['settings']['enable_salad_balance_tracker']
 	title = coloors['settings']['window_title']
 	notifthreshold = coloors['settings']['balance_notification_every']
+	try:
+		enablekey = coloors['settings']['console_enabled']
+	except:
+		coloors['settings']['console_enabled'] = False
+		coloors['settings']["/comment/console"] = "hold E to open console-ish thing to control logs"
+		with open('colors.json', 'w+') as f:
+			f.write(json.dumps(coloors, indent = 4, sort_keys=True))
+		enablekey = False
+		print('added a new thingy in colors.json go check it out!')
 	class custom_colors:
 		pass
 	for color in coloors['custom_colors'].keys():
@@ -72,8 +82,15 @@ class default_colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     DEFAULT = '\033[37;1m'
-
-def fancytype(words, notime=False, colors=[]):
+    #
+    rainbow_1='\u001b[31m'
+    rainbow_2='\u001b[31;1m'
+    rainbow_3='\u001b[32m'
+    rainbow_4='\u001b[36m'
+    rainbow_5='\u001b[34;1m'
+    rainbow_6='\u001b[35;1m'
+import random
+def fancytype(words, notime=False, colors=[], speed=0.0078125):
 	colorwords = ''
 	for color in colors:
 		colorwords = eval(color) + colorwords
@@ -82,16 +99,41 @@ def fancytype(words, notime=False, colors=[]):
 	else:
 		words = ' ' + colorwords + words
 	strin = ''
+	if rainbow:
+		speed /= 8
+		newwords = ''
+		for letter in words:
+			newwords = newwords + eval('default_colors.rainbow_' + str(random.randint(1,6))) + letter
+		words = newwords
 	for let in words:
 		strin = strin + let
 		print(strin, end='\r')
-		time.sleep(0.0078125)
+		time.sleep(speed)
 	print(words + default_colors.ENDC + default_colors.DEFAULT)
+
+from datetime import datetime
+
+def timenow():
+	return '[' + str(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]) + ']'
+
+
+# sadly i have to do this because using salad api is apparently not legal :C
+if enablesalad:
+
+	enablesalad = False
+
+	fancytype('[salad] enablesalad has been disabled | see line 108 for more info', colors=['default_colors.FAIL'], speed=0.03125)
+
+	time.sleep(3)
+
+	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'], speed=0.015625)
+
+# public salad api when https://discordapp.com/channels/509419745834041355/573570381584269312/737716498507890830
+# u can still turn this on at ur own risk ¯\_(ツ)_/¯
+
 
 with open(path) as f:
 	oldest = f.readlines()[-1]
-
-from datetime import datetime
 
 if enablesalad:
 	try:
@@ -139,8 +181,17 @@ if enablesalad:
 		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error! either salad is down or the caveman running this doesnt have internet{default_colors.ENDC}')
 		enablesalad = False
 
-def timenow():
-	return '[' + str(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]) + ']'
+if enablekey:
+	try:
+		import keyboard
+		from win32gui import GetWindowText, GetForegroundWindow
+	except ModuleNotFoundError:
+		print('not found a few modules press any key to install')
+		os.system('pause')
+		os.system('pip install -r requirements.txt --user')
+		time.sleep(5)
+		import keyboard
+		from win32gui import GetWindowText, GetForegroundWindow
 
 def updatever(): # absolutely not copy pasted from my bots code
 	if os.path.isfile('noupdate.txt'):
@@ -166,6 +217,7 @@ def updatever(): # absolutely not copy pasted from my bots code
 				print(file)
 				comd = 'print("hold on im updating myself lmao")\nimport time\nimport requests\nr = requests.get(url = "http://api.shruc.ml/saladlog/download", params = {})\nwith open("' + file + '", "w+") as f:\n\tf.write(r.text)\nr = requests.get(url = "http://api.shruc.ml/saladlog/version", params = {})\nwith open("version.txt", "w+") as f:\n\tf.write("'+ chver +'")\ntime.sleep(1)\nimport os\nos.system(\'start cmd /c "del temp.py & start py ' + file + '\')'
 				f.write(comd)
+			print('u can close this window')
 			os.system('start cmd /c py temp.py')
 			os.system('exit')
 			exit()
@@ -246,6 +298,31 @@ while True:
 				e = 0
 			else:
 				e += 1
+
+		if enablekey:
+			if keyboard.is_pressed('e') and GetWindowText(GetForegroundWindow()) == title:
+				print(' stooped logs')
+				print(' u can now type stuff (try "help")')
+				while True:
+					inp = input(' > ')
+					if inp == 'help':
+						print(' here is h e l p:\n help - show this\n balance - show balance\n rainbow - toggle SHINY\n exit - resume log river')
+					elif inp == 'balance':
+						if enablesalad:
+							r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie)
+							if r.status_code != 200:
+								print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
+								continue
+							jason = r.json()
+							print(' balance is', jason['currentBalance'])
+						else:
+							print(' u dont have salad balance tracker enabled')
+					elif inp == 'rainbow':
+						rainbow = not rainbow
+						print(rainbow, ' this is extremely buggy so yeaah oof')
+					elif inp == 'exit':
+						break
+
 	except Exception as o:
 		print(traceback.format_exc())
 		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error!{default_colors.ENDC}{default_colors.DEFAULT}', str(o))
