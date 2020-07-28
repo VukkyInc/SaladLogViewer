@@ -20,6 +20,10 @@
 # if it works: yay!
 # if it doesnt: fuck! dm SharkOfGod#8424
 
+# salad meanies we cant use api >:C
+# public salad api when https://discordapp.com/channels/509419745834041355/573570381584269312/737716498507890830
+# u can still turn this on at ur own risk ¯\_(ツ)_/¯
+
 # readme ends
 
 # settings begin
@@ -83,12 +87,12 @@ class default_colors:
     UNDERLINE = '\033[4m'
     DEFAULT = '\033[37;1m'
     #
-    rainbow_1='\u001b[31m'
-    rainbow_2='\u001b[31;1m'
-    rainbow_3='\u001b[32m'
-    rainbow_4='\u001b[36m'
-    rainbow_5='\u001b[34;1m'
-    rainbow_6='\u001b[35;1m'
+    rainbow_1='\033[31m'
+    rainbow_2='\033[31;1m'
+    rainbow_3='\033[32m'
+    rainbow_4='\033[36m'
+    rainbow_5='\033[34;1m'
+    rainbow_6='\033[35;1m'
 import random
 def fancytype(words, notime=False, colors=[], speed=0.0078125):
 	colorwords = ''
@@ -116,20 +120,17 @@ from datetime import datetime
 def timenow():
 	return '[' + str(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]) + ']'
 
-
-# sadly i have to do this because using salad api is apparently not legal :C
 if enablesalad:
 
 	enablesalad = False
 
-	fancytype('[salad] enablesalad has been disabled | see line 108 for more info', colors=['default_colors.FAIL'], speed=0.03125)
+	fancytype('[salad] enablesalad has been disabled | see code comments for more info', colors=['default_colors.FAIL'], speed=0.03125)
 
 	time.sleep(3)
 
 	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'], speed=0.015625)
 
-# public salad api when https://discordapp.com/channels/509419745834041355/573570381584269312/737716498507890830
-# u can still turn this on at ur own risk ¯\_(ツ)_/¯
+# turn off enablesalad
 
 
 with open(path) as f:
@@ -215,7 +216,7 @@ def updatever(): # absolutely not copy pasted from my bots code
 			with open('temp.py', 'w+') as f:
 				file = __file__.replace('\\', '/')
 				print(file)
-				comd = 'print("hold on im updating myself lmao")\nimport time\nimport requests\nr = requests.get(url = "http://api.shruc.ml/saladlog/download", params = {})\nwith open("' + file + '", "w+") as f:\n\tf.write(r.text)\nr = requests.get(url = "http://api.shruc.ml/saladlog/version", params = {})\nwith open("version.txt", "w+") as f:\n\tf.write("'+ chver +'")\ntime.sleep(1)\nimport os\nos.system(\'start cmd /c "del temp.py & start py ' + file + '\')'
+				comd = 'print("hold on im updating myself lmao")\nimport time\nimport requests\nr = requests.get(url = "http://api.shruc.ml/saladlog/download", params = {})\nwith open("' + file + '", "w+", encoding="utf-8") as f:\n\tf.write(str(r.text))\nr = requests.get(url = "http://api.shruc.ml/saladlog/version", params = {})\nwith open("version.txt", "w+") as f:\n\tf.write("'+ chver +'")\ntime.sleep(1)\nimport os\nos.system(\'start cmd /c "del temp.py & start py ' + file + '\')'
 				f.write(comd)
 			print('u can close this window')
 			os.system('start cmd /c py temp.py')
