@@ -59,14 +59,6 @@ except Exception as e:
 
 # settings end (shark made settings in a json file therefore he is no longer an idiot)
 
-# try:
-# 	from win32gui import GetWindowText, GetForegroundWindow
-# 	if GetWindowText(GetForegroundWindow()) == '': # force cmd.exe usage
-# 		os.system('start py salad.py')
-# 		exit()
-# except ModuleNotFoundError:
-# 	pass
-
 os.system('title ' + title)
 limit = 10
 path = os.getenv('APPDATA')
@@ -120,14 +112,14 @@ def timenow():
 
 if enablesalad:
  	enablesalad = False
- 	fancytype('[salad] enablesalad has been disabled | see readme in code for more info', colors=['default_colors.FAIL'], speed=0.03125)
- 	time.sleep(3)
- 	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'], speed=0.015625)
- 	fancytype('[salad] or remove this part of code to use balance tracker anyway', colors=['default_colors.FAIL'], speed=0.015625)
+ 	fancytype('[salad] enablesalad has been disabled | see readme in code for more info', colors=['default_colors.FAIL'])
+ 	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'])
+ 	fancytype('[salad] or remove this part of code to use balance tracker anyway', colors=['default_colors.FAIL'])
+ 	time.sleep(2)
 
 # u can delete this part to allow it
 # however saladlogreader dev team does not care what happens to ur account if u do
-# good luck :D
+# have fun :D
 
 
 with open(path) as f:
@@ -147,9 +139,9 @@ if enablesalad:
 		salad_antiforgery = os.getenv('SALAD_ANTIFORGERY')
 		salad_authentication = os.getenv('SALAD_AUTHENTICATION')
 		if salad_authentication is not None and salad_antiforgery is not None:
-			print('all good!!!!')
+			print(' all good!!!!')
 		else:
-			print('pls check ur .env file again')
+			print(' pls check ur .env file again')
 			os.system('pause')
 			exit()
 
@@ -194,7 +186,7 @@ if enablekey:
 		time.sleep(5)
 		import keyboard
 		from win32gui import GetWindowText, GetForegroundWindow
-
+rmh = False
 def updatever(): # absolutely not copy pasted from my bots code
 	try:
 		import requests
@@ -244,6 +236,11 @@ while True:
 				num = limit+1
 			for i in reversed(range(1, num)):
 				lien = line[-i].replace('\n', '')
+				if rmh:
+					if 'Eth speed: ' in lien:
+						sped = float(lien.split('speed: ')[1].split(' MH/s,')[0])
+						mhs['counts'] += 1
+						mhs['total'] += sped
 				if not coloorswork:
 					if 'ETH share found!' in lien:
 						fancytype(f'{lien}', notime=True, colors=['default_colors.OKGREEN', 'default_colors.BOLD'])
@@ -297,7 +294,7 @@ while True:
 				while True:
 					inp = input(' > ')
 					if inp == 'help':
-						print(' here is h e l p:\n help - show this\n balance - show balance\n rainbow - toggle SHINY\n exit - resume log river')
+						print(' here is h e l p:\n help - show this\n balance - show balance\n recordmhs - record hashrate to get average later\n rainbow - toggle SHINY\n exit - resume log river')
 					elif inp == 'balance':
 						if enablesalad:
 							r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
@@ -305,12 +302,21 @@ while True:
 								print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 								continue
 							jason = r.json()
-							print(' balance is', jason['currentBalance'])
+							print(' balance is $', jason['currentBalance'])
 						else:
 							print(' u dont have salad balance tracker enabled')
 					elif inp == 'rainbow':
 						rainbow = not rainbow
 						print(rainbow, ' this is extremely buggy so yeaah oof')
+					elif inp == 'recordmhs':
+						if rmh:
+							print('average mh/s:', mhs['total']/mhs['counts'])
+						rmh = not rmh
+						mhs = {
+							"total": 0,
+							"counts": 0
+						}
+						print(rmh, 'ok')
 					elif inp == 'exit':
 						break
 
