@@ -132,3 +132,4 @@ dmypy.json
 .pyre/
 src/version.txt
 src/noupdate.txt
+src/colors.json
