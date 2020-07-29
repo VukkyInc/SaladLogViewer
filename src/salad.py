@@ -188,6 +188,8 @@ if enablekey:
 		from win32gui import GetWindowText, GetForegroundWindow
 rmh = False
 def updatever(): # absolutely not copy pasted from my bots code
+	if os.path.isfile('noupdate.txt'):
+		return
 	try:
 		import requests
 	except ModuleNotFoundError:
