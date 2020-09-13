@@ -1,6 +1,6 @@
 {
     "custom_colors": {
-        "comment/colors": "use ansi colors!!!",
+        "comment/colors": "Use ansi colors!!!",
         "cyan": "\u001b[36m"
     },
     "custom_text": {
@@ -16,15 +16,15 @@
             "default_colors.OKBLUE",
             "default_colors.BOLD"
         ],
-        "comment/custom text": "if log line has these words apply colors from list"
+        "comment/custom text": "If a log line has these words, apply colors from list"
     },
     "settings": {
-        "/comment/console": "hold E to open console-ish thing to control logs",
+        "/comment/console": "Hold E to open console to control logs",
         "balance_notification_every": 0.001,
-        "comment/notification": "without enable_salad_balance this is useless",
+        "comment/notification": "Without enable_salad_balance enabled this is useless",
         "comment/salad balance": ".env file is required to use this",
         "console_enabled": false,
         "enable_salad_balance_tracker": true,
-        "window_title": "fancy salad miner logs now with a fancy settings file"
+        "window_title": "Fancy salad miner logs"
     }
 }
