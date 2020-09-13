@@ -1,25 +1,20 @@
+#readme start
 
-# readme starts
+# How to get enablesalad to work:
+# 1: Go to app.salad.io
+# 2: Click on lock near url
+# 3: Go to cookies
+# 4: Open app-api.salad.io folder
+# 5: Copy salad.antiforgery and salad.authentication into a ".env" file like this:
+# SALAD_ANTIFORGERY='Your antiforgery code here!'
+# SALAD_AUTHENTICATION='Your authentication code here!'
+# 6: Make sure salad.py is in same folder as the .env
+# 7: Try starting
+# 8: ray that it works
+# If it works: yay!
+# If it doesn't: Contact SharkOfGod#8424 on Discord!
 
-# shitty code i know
-
-# how to get enablesalad to work:
-# 1: go to app.salad.io
-# 2: click on lock near url
-# 3: go to cookies
-# 4: open app-api.salad.io folder
-# 5: copy salad.antiforgery and salad.authentication into a ".env" file like this:
-# SALAD_ANTIFORGERY='antiforgery goes here'
-# SALAD_AUTHENTICATION='authentication goes here'
-# 6: make sure salad.py is in same folder as the .env
-# 7: try starting
-# 8: pray that it works
-# if it works: yay!
-# if it doesnt: fuck! dm SharkOfGod#8424
-
-# public salad api when https://discordapp.com/channels/509419745834041355/573570381584269312/737716498507890830
-
-# readme ends
+# readme end
 
 # settings begin
 
@@ -39,11 +34,11 @@ try:
 		enablekey = coloors['settings']['console_enabled']
 	except:
 		coloors['settings']['console_enabled'] = False
-		coloors['settings']["/comment/console"] = "hold E to open console-ish thing to control logs"
+		coloors['settings']["/comment/console"] = "Hold E to open console to control logs"
 		with open('colors.json', 'w+') as f:
 			f.write(json.dumps(coloors, indent = 4, sort_keys=True))
 		enablekey = False
-		print('added a new thingy in colors.json go check it out!')
+		print('Added a new in colors.json go check it out!')
 	class custom_colors:
 		pass
 	for color in coloors['custom_colors'].keys():
@@ -112,13 +107,13 @@ def timenow():
 
 if enablesalad:
  	enablesalad = False
- 	fancytype('[salad] enablesalad has been disabled | see readme in code for more info', colors=['default_colors.FAIL'])
- 	fancytype('[salad] remove message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'])
- 	fancytype('[salad] or remove this part of code to use balance tracker anyway', colors=['default_colors.FAIL'])
+ 	fancytype('[salad] Enablesalad has been disabled | We aren't allowed to use the salad api...', colors=['default_colors.FAIL'])
+ 	fancytype('[salad] Remove this message by changing enablesalad to false in colors.json', colors=['default_colors.FAIL'])
+ 	fancytype('[salad] Or remove this part of code to use balance tracker | This officially isn't allowed', colors=['default_colors.FAIL'])
  	time.sleep(2)
 
-# u can delete this part to allow it
-# however saladlogreader dev team does not care what happens to ur account if u do
+# You can delete this part to allow enablesalad
+# However the saladlogreader dev team does not care what happens to ur account if u do
 # have fun :D
 
 
@@ -146,7 +141,7 @@ if enablesalad:
 			exit()
 
 	except ModuleNotFoundError:
-		print('not found a few modules press any key to install')
+		print('Missing modules! press any key to install')
 		os.system('pause')
 		os.system('pip install -r requirements.txt --user')
 		time.sleep(5)
@@ -165,14 +160,14 @@ if enablesalad:
 	try:
 		r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
 		if r.status_code != 200:
-			print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
+			print(f'{default_colors.WARNING}{default_colors.BOLD}[api] Error! Something went wrong with the salad api! Probably a 401... Check the auth tokens in the .env file{default_colors.ENDC}')
 			os.system('pause')
 		jason = r.json()
 		oldbalance = jason['currentBalance']
 		pongbal = oldbalance
 		e = 0
 	except requests.ConnectionError:
-		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error! either salad is down or the caveman running this doesnt have internet{default_colors.ENDC}')
+		print(f'{default_colors.WARNING}{default_colors.BOLD}Bad error! Either salad is down or the caveman (SharOfGod) running this doesnt have internet{default_colors.ENDC}')
 		enablesalad = False
 
 if enablekey:
@@ -180,7 +175,7 @@ if enablekey:
 		import keyboard
 		from win32gui import GetWindowText, GetForegroundWindow
 	except ModuleNotFoundError:
-		print('not found a few modules press any key to install')
+		print('Missing modules! press any key to install')
 		os.system('pause')
 		os.system('pip install -r requirements.txt --user')
 		time.sleep(5)
@@ -241,7 +236,7 @@ while True:
 				}
 				r = requests.get(url = 'https://app-api.salad.io/api/v1/profile/balance', cookies = cookie, headers = headers)
 				if r.status_code != 200:
-					print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
+					print(f'{default_colors.WARNING}{default_colors.BOLD}[api] Error! Something went wrong with the salad api! Probably a 401... Check the auth tokens in the .env file{default_colors.ENDC}')
 					continue
 				jason = r.json()
 				if jason['currentBalance'] > oldbalance:
@@ -254,15 +249,15 @@ while True:
 						toaster.show_toast("salad log thing", "balance increased by " + str(jason['currentBalance'] - pongbal) + ' since last notification!', threaded=True, icon_path=None, duration=3)
 						pongbal = jason['currentBalance']
 				else:
-					fancytype('[salad] balance didnt change')
+					fancytype('[salad] Balance didnt change')
 				e = 0
 			else:
 				e += 1
 
 		if enablekey:
 			if keyboard.is_pressed('e') and GetWindowText(GetForegroundWindow()) == title:
-				print(' stooped logs')
-				print(' u can now type stuff (try "help")')
+				print(' Stoped logs')
+				print(' You can now type stuff (try "help")')
 				while True:
 					inp = input(' > ')
 					if inp == 'help':
@@ -294,4 +289,4 @@ while True:
 
 	except Exception as o:
 		print(traceback.format_exc())
-		print(f'{default_colors.WARNING}{default_colors.BOLD}bad bad error!{default_colors.ENDC}{default_colors.DEFAULT}', str(o))
+		print(f'{default_colors.WARNING}{default_colors.BOLD}Bad error!{default_colors.ENDC}{default_colors.DEFAULT}', str(o))
