@@ -187,36 +187,6 @@ if enablekey:
 		import keyboard
 		from win32gui import GetWindowText, GetForegroundWindow
 rmh = False
-def updatever(): # absolutely not copy pasted from my bots code
-	if os.path.isfile('noupdate.txt'):
-		return
-	try:
-		import requests
-	except ModuleNotFoundError:
-		fancytype('[update] requests is required to check for updates!')
-		return
-	try:
-		with open('version.txt') as f:
-			ver = int(f.read())
-		chver = requests.get(url = 'http://api.shruc.ml/saladlog/version', params = {})
-		chver = chver.text.replace('\n', '')
-		chver = chver.replace('"', '')
-		if int(chver) > ver:
-			fancytype('[update] update available! pls download new version from github.com/VukkyInc/SaladLogViewer')
-			os.system('pause')
-			with open('version.txt', 'w+') as f:
-				f.write(chver)
-		else:
-			fancytype('[update] up to date!')
-	except requests.ConnectionError as e:
-		print('website went poo >:C')
-	except Exception as e:
-		print(str(e))
-		print('if this is ur first time running this thing then ignore')
-		with open('version.txt', 'w+') as f:
-			f.write('1')
-
-updatever()
 while True:
 	time.sleep(0.5)
 	matches = False
