@@ -269,12 +269,12 @@ while True:
 								print(f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
 								continue
 							jason = r.json()
-							print(' balance is $', jason['currentBalance'])
+							print(' Balance is $', jason['currentBalance'])
 						else:
-							print(' u dont have salad balance tracker enabled')
+							print(' You dont have salad balance tracker enabled')
 					elif inp == 'rainbow':
 						rainbow = not rainbow
-						print(rainbow, ' this is extremely buggy so yeaah oof')
+						print(rainbow, ' This is extremely buggy so logs will go oof')
 					elif inp == 'recordmhs':
 						if rmh:
 							print('average mh/s:', mhs['total']/mhs['counts'])
