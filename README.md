@@ -18,5 +18,3 @@ SALAD_AUTHENTICATION='Your authentication code here!'
 -  8: Pray that it works
 -  if it works: yay!
 -  if it doesnt: Contact SharkOfGod#8424 on discord
-
-*[Walker21390](https://github.com/Walker21390) also worked on this project :)* 
