@@ -1,0 +1,34 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "P3il4",
+      "name": "P3il4",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/42489293?v=4",
+      "profile": "https://github.com/P3il4",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Walker21390",
+      "name": "Walker21390",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/71191962?v=4",
+      "profile": "https://www.salad.io/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "SaladLogViewer",
+  "projectOwner": "VukkyLtd",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
