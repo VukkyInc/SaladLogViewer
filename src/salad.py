@@ -244,9 +244,12 @@ while True:
 				num = limit+1
 			for i in reversed(range(1, num)):
 				lien = line[-i].replace('\n', '')
-				if 'Eth: Mining ' in lien:
-					cn = lien.split('Eth: Mining ')[1].split(' on')[0]
-					fancytype('[info] ' + cn + ' price: $' + str(prices[cn][0]) + ' (' + prices[cn][2] + '$' + str(abs(math.floor(prices[cn][1]*100000)/100000)) + ' from 24h ago)')
+				try:
+					if 'Eth: Mining ' in lien:
+						cn = lien.split('Eth: Mining ')[1].split(' on')[0]
+						fancytype('[info] ' + cn + ' price: $' + str(prices[cn][0]) + ' (' + prices[cn][2] + '$' + str(abs(math.floor(prices[cn][1]*100000)/100000)) + ' from 24h ago)')
+				except:
+					pass
 				if rmh:
 					if 'Eth speed: ' in lien:
 						sped = float(lien.split('speed: ')[
