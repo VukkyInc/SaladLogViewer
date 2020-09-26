@@ -16,6 +16,7 @@
     "comment/salad balance": ".env file is required to use this",
     "console_enabled": false,
     "enable_salad_balance_tracker": true,
-    "window_title": "Fancy salad miner logs"
+    "window_title": "Fancy salad miner logs",
+    "disable_typewriter": false
   }
 }
