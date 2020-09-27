@@ -127,14 +127,14 @@ ans = r.json()
 if ans['RAW']['CHANGE24HOUR'] < 0:
 	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
 else:
-	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '')
+	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
 
 r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=etc', params = {})
 ans = r.json()
 if ans['RAW']['CHANGE24HOUR'] < 0:
 	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
 else:
-	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '')
+	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
 
 # end
 
