@@ -12,25 +12,6 @@ _The best tool for viewing your Salad logs_
 - 1: Download
 - 2: Run salad.py
 
-# How to use Salad related features?
-- 1: Change "enable_salad_balance_tracker" in colors.json to true
-- 2: Go to app.salad.io
-- 3: Click on lock near url
-- 4: Go to cookies
-- 5: Open app-api.salad.io folder
-- 6: Copy salad.antiforgery and salad.authentication into a ".env" file like this:
-
-```
-SALAD_ANTIFORGERY='Your antiforgery code here!'
-SALAD_AUTHENTICATION='Your authentication code here!'
-```
-
-- 7: Make sure salad.py is in same folder as the .env
-- 8: Run salad.py
-- 9: Pray that it works
-- if it works: yay!
-- if it doesnt: Contact SharkOfGod#8424 on discord
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
