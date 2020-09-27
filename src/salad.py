@@ -1,20 +1,3 @@
-# readme start
-
-# How to get enablesalad to work:
-# 1: Go to app.salad.io
-# 2: Click on lock near url
-# 3: Go to cookies
-# 4: Open app-api.salad.io folder
-# 5: Copy salad.antiforgery and salad.authentication into a ".env" file like this:
-# SALAD_ANTIFORGERY='Your antiforgery code here!'
-# SALAD_AUTHENTICATION='Your authentication code here!'
-# 6: Make sure salad.py is in same folder as the .env
-# 7: Try starting
-# 8: ray that it works
-# If it works: yay!
-# If it doesn't: Contact SharkOfGod#8424 on Discord!
-
-# readme end
 
 # settings begin
 
@@ -31,20 +14,8 @@ try:
 	with open('colors.json') as f:
 		coloors = json.load(f)
 	coloorswork = True
-	enablesalad = coloors['settings']['enable_salad_balance_tracker']
 	title = coloors['settings']['window_title']
 	typewriteroff = coloors['settings']['disable_typewriter']
-	notifthreshold = coloors['settings']['balance_notification_every']
-	try:
-		enablekey = coloors['settings']['console_enabled']
-	except:
-		coloors['settings']['console_enabled'] = False
-		coloors['settings']["/comment/console"] = "Hold E to open console to control logs"
-		with open('colors.json', 'w+') as f:
-			f.write(json.dumps(coloors, indent=4, sort_keys=True))
-		enablekey = False
-		print('Added a new in colors.json go check it out!')
-
 	class custom_colors:
 		pass
 	for color in coloors['custom_colors'].keys():
@@ -54,10 +25,7 @@ except Exception as e:
 	print('important: if ur getting this after an update add "disable_typewriter: false" to "settings" part of colors.json')
 	print('colors.json error using defaults')
 	coloorswork = False
-	enablesalad = False  # balance updates in logs
 	title = 'fancy salad miner logs'
-	notifthreshold = 1  # ping when balance changes by this
-	enablekey = False
 	typewriteroff = False
 
 # settings end (shark made settings in a json file therefore he is no longer an idiot)
@@ -138,90 +106,9 @@ else:
 
 # end
 
-# prevent enablesalad from working
-
-
-if enablesalad:
-	enablesalad = False
-	fancytype('[salad] Enablesalad has been disabled | We aren\'t allowed to use the salad api...', colors=[
-			  'default_colors.FAIL'])
-	fancytype('[salad] Remove this message by changing enablesalad to false in colors.json', colors=[
-			  'default_colors.FAIL'])
-	fancytype('[salad] Or remove this part of code to use balance tracker | This officially isn\'t allowed', colors=[
-			  'default_colors.FAIL'])
-	time.sleep(2)
-
-# You can delete this part to allow enablesalad
-# However the saladlogreader dev team does not care what happens to ur account if u do
-# have fun :D
-
-
 with open(path) as f:
 	oldest = f.readlines()[-1]
 
-if enablesalad:
-	fancytype('[salad] enabled!', colors=['default_colors.OKGREEN'])
-	headers = {
-		"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Salad/0.4.0 Chrome/78.0.3904.130 Electron/7.1.9 Safari/537.36'
-	}
-	try:
-		import requests
-		from dotenv import load_dotenv
-		load_dotenv()
-		from win10toast import ToastNotifier
-		toaster = ToastNotifier()
-		salad_antiforgery = os.getenv('SALAD_ANTIFORGERY')
-		salad_authentication = os.getenv('SALAD_AUTHENTICATION')
-		if salad_authentication is not None and salad_antiforgery is not None:
-			print(' all good!!!!')
-		else:
-			print(' pls check ur .env file again')
-			os.system('pause')
-			exit()
-
-	except ModuleNotFoundError:
-		print('Missing modules! press any key to install')
-		os.system('pause')
-		os.system('pip install -r requirements.txt --user')
-		time.sleep(5)
-		import requests
-		from dotenv import load_dotenv
-		load_dotenv()
-		from win10toast import ToastNotifier
-		toaster = ToastNotifier()
-		salad_antiforgery = os.getenv('SALAD_ANTIFORGERY')
-		salad_authentication = os.getenv('SALAD_AUTHENTICATION')
-
-	cookie = {
-		"Salad.Antiforgery": salad_antiforgery,
-		"Salad.Authentication": salad_authentication
-	}
-	try:
-		r = requests.get(url='https://app-api.salad.io/api/v1/profile/balance',
-						 cookies=cookie, headers=headers)
-		if r.status_code != 200:
-			print(
-				f'{default_colors.WARNING}{default_colors.BOLD}[api] Error! Something went wrong with the salad api! Probably a 401... Check the auth tokens in the .env file{default_colors.ENDC}')
-			os.system('pause')
-		jason = r.json()
-		oldbalance = jason['currentBalance']
-		pongbal = oldbalance
-		e = 0
-	except requests.ConnectionError:
-		print(f'{default_colors.WARNING}{default_colors.BOLD}Bad error! Either salad is down or the caveman (SharOfGod) running this doesnt have internet{default_colors.ENDC}')
-		enablesalad = False
-
-if enablekey:
-	try:
-		import keyboard
-		from win32gui import GetWindowText, GetForegroundWindow
-	except ModuleNotFoundError:
-		print('Missing modules! press any key to install')
-		os.system('pause')
-		os.system('pip install -r requirements.txt --user')
-		time.sleep(5)
-		import keyboard
-		from win32gui import GetWindowText, GetForegroundWindow
 rmh = False
 while True:
 	time.sleep(0.5)
@@ -278,74 +165,6 @@ while True:
 							break
 					if not found:
 						fancytype(lien, notime=True)
-
-		if enablesalad:
-			if e >= 10:
-				fancytype('[salad] checking balance')
-				cookie = {
-					"Salad.Antiforgery": salad_antiforgery,
-					"Salad.Authentication": salad_authentication
-				}
-				r = requests.get(
-					url='https://app-api.salad.io/api/v1/profile/balance', cookies=cookie, headers=headers)
-				if r.status_code != 200:
-					print(
-						f'{default_colors.WARNING}{default_colors.BOLD}[api] Error! Something went wrong with the salad api! Probably a 401... Check the auth tokens in the .env file{default_colors.ENDC}')
-					continue
-				jason = r.json()
-				if jason['currentBalance'] > oldbalance:
-					diff = jason['currentBalance'] - oldbalance
-					oldbalance = jason['currentBalance']
-					fancytype('[salad] balance increased by $' + str(diff), colors=[
-							  'default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
-					fancytype('[salad] new salad balance: $' + str(jason['currentBalance']), colors=[
-							  'default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
-					if jason['currentBalance'] - pongbal > notifthreshold:
-						fancytype('[salad] sending a notification', colors=[
-								  'default_colors.OKGREEN', 'default_colors.BOLD', 'default_colors.UNDERLINE'])
-						toaster.show_toast("salad log thing", "balance increased by " + str(
-							jason['currentBalance'] - pongbal) + ' since last notification!', threaded=True, icon_path=None, duration=3)
-						pongbal = jason['currentBalance']
-				else:
-					fancytype('[salad] Balance didnt change')
-				e = 0
-			else:
-				e += 1
-
-		if enablekey:
-			if keyboard.is_pressed('e') and GetWindowText(GetForegroundWindow()) == title:
-				print(' Stoped logs')
-				print(' You can now type stuff (try "help")')
-				while True:
-					inp = input(' > ')
-					if inp == 'help':
-						print(' here is h e l p:\n help - show this\n balance - show balance\n recordmhs - record hashrate to get average later\n rainbow - toggle SHINY\n exit - resume log river')
-					elif inp == 'balance':
-						if enablesalad:
-							r = requests.get(
-								url='https://app-api.salad.io/api/v1/profile/balance', cookies=cookie, headers=headers)
-							if r.status_code != 200:
-								print(
-									f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
-								continue
-							jason = r.json()
-							print(' Balance is $', jason['currentBalance'])
-						else:
-							print(' You dont have salad balance tracker enabled')
-					elif inp == 'rainbow':
-						rainbow = not rainbow
-						print(rainbow, ' This is extremely buggy so logs will go oof')
-					elif inp == 'recordmhs':
-						if rmh:
-							print('average mh/s:', mhs['total']/mhs['counts'])
-						rmh = not rmh
-						mhs = {
-							"total": 0,
-							"counts": 0
-						}
-						print(rmh, 'ok')
-					elif inp == 'exit':
-						break
 
 	except Exception as o:
 		print(traceback.format_exc())
