@@ -23,13 +23,7 @@
         "comment/custom text": "If a log line has these words, apply colors from list"
     },
     "settings": {
-        "/comment/console": "Hold E to open console to control logs",
-        "balance_notification_every": 0.001,
-        "comment/notification": "Without enable_salad_balance enabled this is useless",
-        "comment/salad balance": ".env file is required to use this",
         "comment/disable typewriter": "Turn off the nice text effect",
-        "console_enabled": false,
-        "enable_salad_balance_tracker": false,
         "window_title": "Fancy salad miner logs",
         "disable_typewriter": false
     }
