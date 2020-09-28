@@ -33,6 +33,8 @@ try:
 	coloorswork = True
 	enablesalad = coloors['settings']['enable_salad_balance_tracker']
 	title = coloors['settings']['window_title']
+	presence = coloors['settings']['experimental_discord_presence']
+	pclient = coloors['settings']['presence_client_id']
 	typewriteroff = coloors['settings']['disable_typewriter']
 	notifthreshold = coloors['settings']['balance_notification_every']
 	try:
@@ -54,6 +56,7 @@ except Exception as e:
 	print('important: if ur getting this after an update add "disable_typewriter: false" to "settings" part of colors.json')
 	print('colors.json error using defaults')
 	coloorswork = False
+	presence = False
 	enablesalad = False  # balance updates in logs
 	title = 'fancy salad miner logs'
 	notifthreshold = 1  # ping when balance changes by this
@@ -122,20 +125,25 @@ def timenow():
 
 prices = {}
 
-r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=eth', params = {})
-ans = r.json()
-if ans['RAW']['CHANGE24HOUR'] < 0:
-	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
-else:
-	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
+try:
+	r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=eth', params = {}, timeout = 5)
+	ans = r.json()
+	if ans['RAW']['CHANGE24HOUR'] < 0:
+		prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
+	else:
+		prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
 
-r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=etc', params = {})
-ans = r.json()
-if ans['RAW']['CHANGE24HOUR'] < 0:
-	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
-else:
-	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
-
+	r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=etc', params = {}, timeout = 5)
+	ans = r.json()
+	if ans['RAW']['CHANGE24HOUR'] < 0:
+		prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
+	else:
+		prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
+except:
+	print('oops the api is dead')
+	prices['ETH'] = (0, 0, '+')
+	prices['ETC'] = (0, 0, '+')
+	
 # end
 
 # prevent enablesalad from working
@@ -159,6 +167,19 @@ if enablesalad:
 with open(path) as f:
 	oldest = f.readlines()[-1]
 
+if presence:
+	try:
+		from pypresence import Presence
+	except ImportError:
+		print('not found a few modules press any key to install')
+		os.system('pause')
+		os.system('pip install pypresence --user')
+		from pypresence import Presence
+	rpc = Presence(int(pclient))
+	rpc.connect()
+	fancytype('[rpc] ok', colors=['default_colors.OKGREEN'])
+	oldp = int(time.time())
+	
 if enablesalad:
 	fancytype('[salad] enabled!', colors=['default_colors.OKGREEN'])
 	headers = {
@@ -223,6 +244,7 @@ if enablekey:
 		import keyboard
 		from win32gui import GetWindowText, GetForegroundWindow
 rmh = False
+asp = 0
 while True:
 	time.sleep(0.5)
 	matches = False
@@ -256,6 +278,10 @@ while True:
 									 1].split(' MH/s,')[0])
 						mhs['counts'] += 1
 						mhs['total'] += sped
+				if 'Eth: Average speed' in lien:
+					asp = float(lien.split('min): ')[1].split(' MH/s')[0])
+				if 'shares' and 'time' in lien:
+					tme = lien.split('time: ')[1]
 				if not coloorswork:
 					if 'ETH share found!' in lien:
 						fancytype(f'{lien}', notime=True, colors=[
@@ -347,6 +373,11 @@ while True:
 					elif inp == 'exit':
 						break
 
+		if int(time.time()) > oldp + 30:
+			oldp = int(time.time())
+			fancytype('[rpc] updating')
+			rpc.update(state = 'MH/s: ' + str(asp), details = 'Chopping for: ' + tme)
+			
 	except Exception as o:
 		print(traceback.format_exc())
 		print(f'{default_colors.WARNING}{default_colors.BOLD}Bad error!{default_colors.ENDC}{default_colors.DEFAULT}', str(o))
