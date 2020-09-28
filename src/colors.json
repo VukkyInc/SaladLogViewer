@@ -13,12 +13,12 @@
             "default_colors.OKBLUE",
             "default_colors.BOLD"
         ],
-		"Share accepted": [
-			"default_colors.OKGREEN",
+        "Share accepted": [
+            "default_colors.OKGREEN",
             "default_colors.BOLD"
         ],
-		"Share rejected": [
-			"default_colors.FAIL",
+        "Share rejected": [
+            "default_colors.FAIL",
             "default_colors.BOLD"
         ]
     },
@@ -26,15 +26,15 @@
         "/comment/console": "hold E to open console-ish thing to control logs",
         "/comment/notification": "without enable_salad_balance this is useless",
         "/comment/salad balance": ".env file is required to use this",
-		"/comment/presence": "use discord rich presence to show mh/s and chop time",
-		"/comment/client_id": "put a different client id to change 'salad live logs' title",
-		
-		"experimental_discord_presence": false,
-		"presence_client_id": 713337825990279211,
+        "/comment/presence": "use discord rich presence to show mh/s and chop time",
+        "/comment/client_id": "put a different client id to change 'salad live logs' title",
+        
+        "experimental_discord_presence": true,
+        "presence_client_id": 713337825990279211,
         "balance_notification_every": 0.05,
-        "console_enabled": false,
+        "console_enabled": true,
         "enable_salad_balance_tracker": false,
         "window_title": "fancy salad miner logs",
-		"disable_typewriter": false
+        "disable_typewriter": true
     }
 }
