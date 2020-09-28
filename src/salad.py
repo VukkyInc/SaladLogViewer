@@ -37,15 +37,6 @@ try:
 	pclient = coloors['settings']['presence_client_id']
 	typewriteroff = coloors['settings']['disable_typewriter']
 	notifthreshold = coloors['settings']['balance_notification_every']
-	try:
-		enablekey = coloors['settings']['console_enabled']
-	except:
-		coloors['settings']['console_enabled'] = False
-		coloors['settings']["/comment/console"] = "Hold E to open console to control logs"
-		with open('colors.json', 'w+') as f:
-			f.write(json.dumps(coloors, indent=4, sort_keys=True))
-		enablekey = False
-		print('Added a new in colors.json go check it out!')
 
 	class custom_colors:
 		pass
@@ -60,7 +51,6 @@ except Exception as e:
 	enablesalad = False  # balance updates in logs
 	title = 'fancy salad miner logs'
 	notifthreshold = 1  # ping when balance changes by this
-	enablekey = False
 	typewriteroff = False
 
 # settings end (shark made settings in a json file therefore he is no longer an idiot)
@@ -236,19 +226,6 @@ if enablesalad:
 	except requests.ConnectionError:
 		print(f'{default_colors.WARNING}{default_colors.BOLD}Bad error! Either salad is down or the caveman (SharOfGod) running this doesnt have internet{default_colors.ENDC}')
 		enablesalad = False
-
-if enablekey:
-	try:
-		import keyboard
-		from win32gui import GetWindowText, GetForegroundWindow
-	except ModuleNotFoundError:
-		print('Missing modules! press any key to install')
-		os.system('pause')
-		os.system('pip install -r requirements.txt --user')
-		time.sleep(5)
-		import keyboard
-		from win32gui import GetWindowText, GetForegroundWindow
-rmh = False
 asp = 0
 while True:
 	time.sleep(0.5)
@@ -277,12 +254,6 @@ while True:
 						fancytype('[info] ' + cn + ' price: $' + str(prices[cn][0]) + ' (' + prices[cn][2] + '$' + str(abs(math.floor(prices[cn][1]*100000)/100000)) + ' from 24h ago)')
 				except:
 					pass
-				if rmh:
-					if 'Eth speed: ' in lien:
-						sped = float(lien.split('speed: ')[
-									 1].split(' MH/s,')[0])
-						mhs['counts'] += 1
-						mhs['total'] += sped
 				if 'Eth: Average speed' in lien:
 					asp = float(lien.split('min): ')[1].split(' MH/s')[0])
 				if 'shares' and 'time' in lien:
@@ -342,41 +313,6 @@ while True:
 				e = 0
 			else:
 				e += 1
-
-		if enablekey:
-			if keyboard.is_pressed('e') and GetWindowText(GetForegroundWindow()) == title:
-				print(' Stoped logs')
-				print(' You can now type stuff (try "help")')
-				while True:
-					inp = input(' > ')
-					if inp == 'help':
-						print(' here is h e l p:\n help - show this\n balance - show balance\n recordmhs - record hashrate to get average later\n rainbow - toggle SHINY\n exit - resume log river')
-					elif inp == 'balance':
-						if enablesalad:
-							r = requests.get(
-								url='https://app-api.salad.io/api/v1/profile/balance', cookies=cookie, headers=headers)
-							if r.status_code != 200:
-								print(
-									f'{default_colors.WARNING}{default_colors.BOLD}less bad error! fuck something went wrong with salad api thing probably another 401 go check the auth tokens{default_colors.ENDC}')
-								continue
-							jason = r.json()
-							print(' Balance is $', jason['currentBalance'])
-						else:
-							print(' You dont have salad balance tracker enabled')
-					elif inp == 'rainbow':
-						rainbow = not rainbow
-						print(rainbow, ' This is extremely buggy so logs will go oof')
-					elif inp == 'recordmhs':
-						if rmh:
-							print('average mh/s:', mhs['total']/mhs['counts'])
-						rmh = not rmh
-						mhs = {
-							"total": 0,
-							"counts": 0
-						}
-						print(rmh, 'ok')
-					elif inp == 'exit':
-						break
 
 		if presence:
 			if int(time.time()) > oldp + 30:
