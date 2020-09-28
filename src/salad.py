@@ -15,6 +15,8 @@ try:
 		coloors = json.load(f)
 	coloorswork = True
 	title = coloors['settings']['window_title']
+	presence = coloors['settings']['experimental_discord_presence']
+	pclient = coloors['settings']['presence_client_id']
 	typewriteroff = coloors['settings']['disable_typewriter']
 	class custom_colors:
 		pass
@@ -25,6 +27,7 @@ except Exception as e:
 	print('important: if ur getting this after an update add "disable_typewriter: false" to "settings" part of colors.json')
 	print('colors.json error using defaults')
 	coloorswork = False
+	presence = False
 	title = 'fancy salad miner logs'
 	typewriteroff = False
 
@@ -90,26 +93,50 @@ def timenow():
 
 prices = {}
 
-r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=eth', params = {})
-ans = r.json()
-if ans['RAW']['CHANGE24HOUR'] < 0:
-	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
-else:
-	prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
+try:
+	
+	r = requests.get(url = 'http://api.shruc.ml/saladlog/news', params = {}, timeout = 5)
+	fancytype('[news] ' + r.text[1:-2], colors = ['default_colors.WARNING', 'default_colors.BOLD'])
+	time.sleep(1)
+	
+	r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=eth', params = {}, timeout = 5)
+	ans = r.json()
+	if ans['RAW']['CHANGE24HOUR'] < 0:
+		prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
+	else:
+		prices['ETH'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
 
-r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=etc', params = {})
-ans = r.json()
-if ans['RAW']['CHANGE24HOUR'] < 0:
-	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
-else:
-	prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
-
+	r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=etc', params = {}, timeout = 5)
+	ans = r.json()
+	if ans['RAW']['CHANGE24HOUR'] < 0:
+		prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '-')
+	else:
+		prices['ETC'] = (ans['RAW']['PRICE'], ans['RAW']['CHANGE24HOUR'], '+')
+except:
+	print('oops the api is dead')
+	prices['ETH'] = (0, 0, '+')
+	prices['ETC'] = (0, 0, '+')
+	
 # end
+
+if presence:
+	try:
+		from pypresence import Presence
+	except ImportError:
+		print('not found a few modules press any key to install')
+		os.system('pause')
+		os.system('pip install pypresence --user')
+		from pypresence import Presence
+	rpc = Presence(int(pclient))
+	rpc.connect()
+	fancytype('[rpc] ok', colors=['default_colors.OKGREEN'])
+	oldp = int(time.time())
 
 with open(path) as f:
 	oldest = f.readlines()[-1]
 
 rmh = False
+asp = 0
 while True:
 	time.sleep(0.5)
 	matches = False
@@ -143,6 +170,10 @@ while True:
 									 1].split(' MH/s,')[0])
 						mhs['counts'] += 1
 						mhs['total'] += sped
+				if 'Eth: Average speed' in lien:
+					asp = float(lien.split('min): ')[1].split(' MH/s')[0])
+				if 'shares' and 'time' in lien:
+					tme = lien.split('time: ')[1]
 				if not coloorswork:
 					if 'ETH share found!' in lien:
 						fancytype(f'{lien}', notime=True, colors=[
@@ -165,6 +196,11 @@ while True:
 							break
 					if not found:
 						fancytype(lien, notime=True)
+		if presence:
+			if int(time.time()) > oldp + 30:
+				oldp = int(time.time())
+				fancytype('[rpc] updating')
+				rpc.update(state = 'MH/s: ' + str(asp), details = 'Chopping for: ' + tme)
 
 	except Exception as o:
 		print(traceback.format_exc())
