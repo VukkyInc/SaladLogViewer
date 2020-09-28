@@ -378,10 +378,11 @@ while True:
 					elif inp == 'exit':
 						break
 
-		if int(time.time()) > oldp + 30:
-			oldp = int(time.time())
-			fancytype('[rpc] updating')
-			rpc.update(state = 'MH/s: ' + str(asp), details = 'Chopping for: ' + tme)
+		if presence:
+			if int(time.time()) > oldp + 30:
+				oldp = int(time.time())
+				fancytype('[rpc] updating')
+				rpc.update(state = 'MH/s: ' + str(asp), details = 'Chopping for: ' + tme)
 			
 	except Exception as o:
 		print(traceback.format_exc())
