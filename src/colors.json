@@ -1,36 +1,40 @@
 {
     "custom_colors": {
-        "comment/colors": "Use ansi colors!!!",
+        "/comment/colors": "use ansi colors!!!",
         "cyan": "\u001b[36m"
     },
     "custom_text": {
-        "ETH share found!": [
-            "default_colors.OKGREEN", 
-            "default_colors.BOLD"
-        ],
+        "/comment/custom text": "if log line has these words apply colors from list",
         "Eth: Average speed": [
-            "default_colors.FAIL", 
+            "custom_colors.cyan",
             "default_colors.BOLD"
         ],
         "GPU": [
-            "default_colors.OKBLUE", 
+            "default_colors.OKBLUE",
             "default_colors.BOLD"
         ],
-        "Share accepted": [
-            "custom_colors.cyan", 
+		"Share accepted": [
+			"default_colors.OKGREEN",
             "default_colors.BOLD"
         ],
-        "comment/custom text": "If a log line has these words, apply colors from list"
+		"Share rejected": [
+			"default_colors.FAIL",
+            "default_colors.BOLD"
+        ]
     },
     "settings": {
-        "/comment/console": "Hold E to open console to control logs",
-        "balance_notification_every": 0.001,
-        "comment/notification": "Without enable_salad_balance enabled this is useless",
-        "comment/salad balance": ".env file is required to use this",
-        "comment/disable typewriter": "Turn off the nice text effect",
+        "/comment/console": "hold E to open console-ish thing to control logs",
+        "/comment/notification": "without enable_salad_balance this is useless",
+        "/comment/salad balance": ".env file is required to use this",
+		"/comment/presence": "use discord rich presence to show mh/s and chop time",
+		"/comment/client_id": "put a different client id to change 'salad live logs' title",
+		
+		"experimental_discord_presence": false,
+		"presence_client_id": 713337825990279211,
+        "balance_notification_every": 0.05,
         "console_enabled": false,
         "enable_salad_balance_tracker": false,
-        "window_title": "Fancy salad miner logs",
-        "disable_typewriter": false
+        "window_title": "fancy salad miner logs",
+		"disable_typewriter": false
     }
 }
