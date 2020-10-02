@@ -13,6 +13,7 @@ _The best tool for viewing your Salad logs_
 - 2: Run salad.py
 
 # How to use Salad related features?
+- !! There is no public Salad api so don't use this for now! !!
 - 1: Change "enable_salad_balance_tracker" in colors.json to true
 - 2: Go to app.salad.io
 - 3: Click on lock near url
