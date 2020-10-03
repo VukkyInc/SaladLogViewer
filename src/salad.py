@@ -136,6 +136,7 @@ with open(path) as f:
 
 rmh = False
 asp = 0
+di = 0
 while True:
 	time.sleep(0.5)
 	matches = False
