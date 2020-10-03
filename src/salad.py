@@ -96,7 +96,7 @@ prices = {}
 try:
 	
 	r = requests.get(url = 'http://api.shruc.ml/saladlog/news', params = {}, timeout = 5)
-	fancytype('[news] ' + r.text[1:-2], colors = ['default_colors.WARNING', 'default_colors.BOLD'])
+	print('[news] ' + r.text[1:-2])
 	time.sleep(1)
 	
 	r = requests.get(url = 'http://api.shruc.ml/saladlog/price?coin=eth', params = {}, timeout = 5)
