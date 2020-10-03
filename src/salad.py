@@ -66,7 +66,7 @@ def fancytype(words, notime=False, colors=[], speed=0.0078125):
 		words = ' ' + colorwords + timenow() + ' ' + words
 	else:
 		words = ' ' + colorwords + words
-	
+
 	if typewriteroff:
 		print(words + default_colors.ENDC + default_colors.DEFAULT)
 		return
@@ -75,9 +75,7 @@ def fancytype(words, notime=False, colors=[], speed=0.0078125):
 		speed /= 8
 		newwords = ''
 		for letter in words:
-			newwords = newwords + \
-				eval('default_colors.rainbow_' +
-					 str(random.randint(1, 6))) + letter
+			newwords = newwords + eval('default_colors.rainbow_' + str(random.randint(1,6))) + letter
 		words = newwords
 	for let in words:
 		strin = strin + let
