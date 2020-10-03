@@ -16,6 +16,7 @@ try:
 	coloorswork = True
 	title = coloors['settings']['window_title']
 	presence = coloors['settings']['experimental_discord_presence']
+	prmsgs = coloors['settings']['presence_messages']
 	pclient = coloors['settings']['presence_client_id']
 	typewriteroff = coloors['settings']['disable_typewriter']
 	class custom_colors:
@@ -198,7 +199,15 @@ while True:
 			if int(time.time()) > oldp + 30:
 				oldp = int(time.time())
 				fancytype('[rpc] updating')
-				rpc.update(state = 'MH/s: ' + str(asp), details = 'Chopping for: ' + tme)
+				hrs = tme.split(':')[0]
+				mins = tme.split(':')[1]
+				secs = int(hrs) * 3600 + int(mins) * 60
+				now = int(time.time())
+				diff = now - secs
+				rpc.update(state = 'mh/s: ' + str(asp), details = prmsgs[di], start = diff)
+				di += 1
+				if di >= len(prmsgs):
+					di = 0
 
 	except Exception as o:
 		print(traceback.format_exc())
