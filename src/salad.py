@@ -25,7 +25,6 @@ try:
 		setattr(custom_colors, color, coloors['custom_colors'][color])
 except Exception as e:
 	print(traceback.format_exc())
-	print('important: if ur getting this after an update add "disable_typewriter: false" to "settings" part of colors.json')
 	print('colors.json error using defaults')
 	coloorswork = False
 	presence = False
