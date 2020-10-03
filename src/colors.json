@@ -25,19 +25,19 @@
     "settings": {
         "comment/disable typewriter": "Turn off the nice text effect",
         "/comment/presence": "use discord rich presence to show mh/s and chop time",
-		"/comment/client_id": "put a different client id to change 'salad live logs' title",
-		"/comment/presence_messages": "show these messages in presence status in order",
+        "/comment/client_id": "put a different client id to change 'salad live logs' title",
+        "/comment/presence_messages": "show these messages in presence status in order",
         "window_title": "Fancy salad miner logs",
         "disable_typewriter": false,
         "experimental_discord_presence": false,
-		"presence_client_id": 713337825990279211,
-		"presence_messages": [
-			"jord go brrr",
-			"fan go vrrrr",
-			"does this work?",
-			"asd",
-			"holidays yay",
-			"by salad miner logs"
-		]
+        "presence_client_id": 713337825990279211,
+        "presence_messages": [
+            "jord go brrr",
+            "fan go vrrrr",
+            "does this work?",
+            "asd",
+            "holidays yay",
+            "by salad miner logs"
+        ]
     }
 }
