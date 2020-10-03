@@ -6,7 +6,12 @@ from datetime import datetime
 import json
 import os
 import time
-import requests
+try:
+	import requests
+except ImportError:
+	print('not found a few modules press any key to install')
+	os.system('pause')
+	os.system('pip install -r requirements.txt --user')
 import traceback
 import math
 rainbow = False
