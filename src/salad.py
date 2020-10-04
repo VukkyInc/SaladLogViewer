@@ -148,7 +148,12 @@ while True:
 		with open(path) as f:
 			line = f.readlines()
 			for i in range(1, limit+1):
-				lien = line[-i].replace('\n', '')
+				try:
+					lien = line[-i].replace('\n', '')
+				except:
+					print('refreshing')
+					with open(path) as f:
+						oldest = f.readlines()[-1]
 				# print('-------------')
 				# print(lien, i)
 				# print(oldest)
