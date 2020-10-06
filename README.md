@@ -12,6 +12,8 @@ _The best tool for viewing your Salad logs_
 - 1: Download
 - 2: Run salad.py
 
+<sub><sup>it should work</sup></sub>
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
